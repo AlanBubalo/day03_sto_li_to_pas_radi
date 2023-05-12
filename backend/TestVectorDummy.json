@@ -1,0 +1,46 @@
+{
+    "TestVectors": [
+        {
+            "Index": 1,
+            "Temperature": -40.0,
+            "Humidity": 10.0,
+            "Input voltage": 3.3,
+            "Frequency": 5.0
+        },
+        {
+            "Index": 2,
+            "Temperature": -20.0,
+            "Humidity": 10.0,
+            "Input voltage": 3.3,
+            "Frequency": 5.0
+        },
+        {
+            "Index": 3,
+            "Temperature": -60.0,
+            "Humidity": 0.0,
+            "Input voltage": 3.3,
+            "Frequency": 5.0
+        },
+        {
+            "Index": 4,
+            "Temperature": 100.0,
+            "Humidity": 40.0,
+            "Input voltage": 3.3,
+            "Frequency": 5.0
+        },
+        {
+            "Index": 5,
+            "Temperature": 150.0,
+            "Humidity": 30.0,
+            "Input voltage": 3.3,
+            "Frequency": 5.0
+        },
+        {
+            "Index": 6,
+            "Temperature": 60.0,
+            "Humidity": 20.0,
+            "Input voltage": 3.3,
+            "Frequency": 5.0
+        }
+    ]
+}

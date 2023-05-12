@@ -1,9 +1,9 @@
 <template>
-  <v-container class="fill-height">
+  <v-main>
     <router-view />
-  </v-container>
+  </v-main>
 </template>
 
 <script setup>
-//
+  //
 </script>

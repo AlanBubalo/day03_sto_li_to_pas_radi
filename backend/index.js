@@ -90,3 +90,8 @@ app.get("api/export-vector-table/:sampleId", (req, res) => {
 app.listen(3000, () => {
     console.log("Server started on port 3000");
 });
+
+
+const data = require('./TestVectorDummy.json')
+
+console.log(data)

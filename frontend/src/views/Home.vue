@@ -1,4 +1,38 @@
-<template></template>
+<template>
+  <v-container>
+    <v-col class="text-right"> <v-btn color="primary">SWITCH</v-btn></v-col>
+    <v-table>
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Temperature</th>
+          <th>Humidity</th>
+          <th>Input voltage</th>
+          <th>Frequency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in data" :key="item.idx">
+          <td>
+            <v-btn plain>{{ item.idx }}</v-btn>
+          </td>
+          <td>
+            <v-btn plain>{{ item.temperature }}</v-btn>
+          </td>
+          <td>
+            <v-btn plain>{{ item.humidity }}</v-btn>
+          </td>
+          <td>
+            <v-btn plain>{{ item.input_voltage }}</v-btn>
+          </td>
+          <td>
+            <v-btn plain>{{ item.freq }}</v-btn>
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </v-container>
+</template>
 
 <script>
 export default {
@@ -17,4 +51,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.v-btn {
+  /* elevation: zero; */
+}
+</style>

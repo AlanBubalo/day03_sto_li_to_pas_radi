@@ -5,8 +5,9 @@
       <v-icon icon="mdi-signal" />
     </v-app-bar-title>
     <v-spacer></v-spacer>
-    <v-btn v-model="activeBtn" text to="/">Home</v-btn>
-    <v-btn v-model="activeBtn" text to="/samples">Samples</v-btn>
+    <v-btn text to="/">Home</v-btn>
+    <v-btn text to="/samples">Samples</v-btn>
+    <v-btn text to="/test-point-collections">Test Point Collections</v-btn>
   </v-app-bar>
 </template>
 
@@ -14,21 +15,8 @@
 export default {
   name: "my-component",
   data() {
-    return {
-      active_btn: "home",
-    };
+    return {};
   },
-  computed: {
-    activeBtn() {
-      switch (this.$route.name) {
-        case "Home":
-          return "/";
-        case "Samples":
-          return "/samples";
-        default:
-          return null;
-      }
-    },
-  },
+  computed: {},
 };
 </script>

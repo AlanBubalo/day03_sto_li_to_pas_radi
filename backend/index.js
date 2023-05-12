@@ -6,7 +6,7 @@ var testVectorService = require("./TestVectorService.js");
 
 app.use(cors());
 
-function getData(status, msg, data=[]) {
+function getData(status, msg, data = []) {
     return {
         status: status,
         msg: msg,
@@ -43,7 +43,7 @@ app.get("/api/input-conditions", (req, res) => {
             res.status(400).json(getData(400, err.message));
             return;
         }
-    
+
         res.json(getData(200, "success", rows));
     });
 });
@@ -56,7 +56,7 @@ app.get("/api/test-point-collections", (req, res) => {
             res.status(400).json(getData(400, err.message));
             return;
         }
-    
+
         res.json(getData(200, "success", rows));
     });
 });
@@ -67,6 +67,24 @@ app.get("/api/get-vector-table/:sampleId", (req, res) => {
     }
 
     res.json(getData(200, "success", testVectorService.getVectorTable(parseInt(req.params.sampleId))));
+});
+
+
+app.get("api/export-vector-table/:sampleId", (req, res) => {
+    const path = './files/' + Date.now() + '.csv';
+    //create the files directory if it doesn't exist
+    if (!fs.existsSync('./files')) {
+        fs.mkdirSync('./files');
+    }
+
+    fs.writeFile(path, str, function (err) {
+        if (err) {
+            console.error(err)
+            return res.status(400).json({ success: false, message: 'An error occurred' })
+        }
+
+        res.download(path, 'file.csv')
+    })
 });
 
 app.listen(3000, () => {

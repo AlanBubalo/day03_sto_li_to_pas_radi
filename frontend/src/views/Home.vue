@@ -31,6 +31,7 @@
         </tr>
       </tbody>
     </v-table>
+    <v-col class="text-left"> <v-btn color="primary">EXPORT</v-btn></v-col>
   </v-container>
 </template>
 

@@ -66,11 +66,13 @@ app.get("/api/get-vector-table/:sampleId", (req, res) => {
         res.json(getData(400, "sampleId must be an integer"));
     }
 
-    res.json(getData(200, "success", testVectorService.getVectorTable(parseInt(req.params.sampleId))));
+    testVectorService.getVectorTable(parseInt(req.params.sampleId), (err, data) => {
+        res.json(getData(200, "success", data));
+    })
 });
 
-
-app.get("api/export-vector-table/:sampleId", (req, res) => {
+/*
+app.get("/api/export-vector-table/:sampleId", (req, res) => {
     const path = './files/' + Date.now() + '.csv';
     //create the files directory if it doesn't exist
     if (!fs.existsSync('./files')) {
@@ -86,12 +88,8 @@ app.get("api/export-vector-table/:sampleId", (req, res) => {
         res.download(path, 'file.csv')
     })
 });
+*/
 
 app.listen(3000, () => {
     console.log("Server started on port 3000");
 });
-
-
-const data = require('./TestVectorDummy.json')
-
-console.log(data)

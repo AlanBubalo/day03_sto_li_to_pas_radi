@@ -82,9 +82,9 @@ function generateTables(db) {
         });
     });
 
-    // Create the testPointCollections table
+    // Create the testPointsCollections table
     db.run(`
-    CREATE TABLE testPointCollections (
+    CREATE TABLE testPointsCollections (
         Id INTEGER PRIMARY KEY,
         InputConditionId integer, 
         SampleIds text,
@@ -99,7 +99,7 @@ function generateTables(db) {
 
         testPointCollections.forEach((testPointCollection) => {
             db.run(`
-        INSERT INTO testPointCollections (Id, InputConditionId, SampleIds, TestPoints)
+        INSERT INTO testPointsCollections (Id, InputConditionId, SampleIds, TestPoints)
         VALUES (?, ?, ?, ?);
       `, [testPointCollection.Id, testPointCollection.InputConditionId, testPointCollection.SampleIds, testPointCollection.TestPoints], (err) => {
                 if (err) {

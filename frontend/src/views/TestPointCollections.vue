@@ -4,9 +4,9 @@
       <v-card>
         <v-header> Test points </v-header>
         <v-card-text>
-          <v-chip-group>
+          <v-chip-group v-if="!loading">
             <v-chip
-              v-for="point in desserts[current_id]['points']"
+              v-for="point in data[current_id]['TestPoints']"
               :key="point"
             >
               {{ point }}
@@ -18,24 +18,34 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-table>
-      <thead>
-        <tr>
-          <th class="text-left">Parameter</th>
-          <th class="text-left">Nez</th>
-          <th class="text-left"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, i) in desserts" :key="item.name">
-          <td>{{ item.name }}</td>
-          <td>{{ item.calories }}</td>
-          <td>
-            <v-btn @click="current_id = i"> TEST POINTS </v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
+    <v-col class="text-center">
+      <div v-if="loading">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+        <v-table>
+          <thead>
+            <tr>
+              <th class="text-left">Input condition ID</th>
+              <th class="text-left">Sample ID</th>
+              <th class="text-left"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, i) in data" :key="item.Id">
+              <td>{{ item.InputConditionId }}</td>
+              <td>{{ item.SampleIds }}</td>
+              <td>
+                <v-btn @click="current_id = i"> TEST POINTS </v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </div>
+    </v-col>
   </v-container>
 </template>
 
@@ -44,56 +54,8 @@ export default {
   data: () => ({
     dialog: false,
     current_id: 0,
-    headers: [
-      { text: "Dessert (100g serving)", value: "name" },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
-    desserts: [
-      {
-        name: "Frozen Yogurt",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Ice cream sandwich",
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Eclair",
-        calories: 262,
-        fat: 16.0,
-        carbs: 24,
-        protein: 6.0,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Cupcake",
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Gingerbread",
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        points: [1, 2, 3, 4, 5],
-      },
-    ],
+    loading: false,
+    data: [],
   }),
   methods: {
     editItem(item) {
@@ -104,11 +66,29 @@ export default {
     },
   },
   async mounted() {
+    this.loading = true;
     const response = await fetch(
       "http://localhost:3000/api/test-point-collections"
     );
-    const jsonData = await response.json();
-    console.log(jsonData);
+    const res = await response.json();
+
+    const res_data = res.data;
+
+    const nesto = res_data.map((a) => {
+      return {
+        Id: a["Id"],
+        InputConditionId: a["InputConditionId"],
+        SampleIds: a["SampleIds"].replace(/\[|\]/g, "").split(","),
+        TestPoints: a["TestPoints"].replace(/\[|\]/g, "").split(","),
+      };
+    });
+
+    console.log(nesto);
+    this.data = nesto;
+
+    console.log(this.data);
+
+    this.loading = false;
   },
 };
 </script>

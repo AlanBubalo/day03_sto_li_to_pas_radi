@@ -21,17 +21,17 @@
     <v-table>
       <thead>
         <tr>
-          <th class="text-left">Parameter</th>
-          <th class="text-left">Nez</th>
-          <th class="text-left"></th>
+          <th class="text-left">Family name</th>
+          <th class="text-left">Product name</th>
+          <th class="text-left">Name</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, i) in desserts" :key="item.name">
-          <td>{{ item.name }}</td>
-          <td>{{ item.calories }}</td>
+        <tr v-for="item in data" :key="item.Id">
+          <td>{{ item.FamilyName }}</td>
+          <td>{{ item.ProductName }}</td>
           <td>
-            <v-btn @click="current_id = i"> TEST POINTS </v-btn>
+            {{ item.Name }}
           </td>
         </tr>
       </tbody>
@@ -42,58 +42,7 @@
 <script>
 export default {
   data: () => ({
-    dialog: false,
-    current_id: 0,
-    headers: [
-      { text: "Dessert (100g serving)", value: "name" },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
-    desserts: [
-      {
-        name: "Frozen Yogurt",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Ice cream sandwich",
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Eclair",
-        calories: 262,
-        fat: 16.0,
-        carbs: 24,
-        protein: 6.0,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Cupcake",
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        points: [1, 2, 3, 4, 5],
-      },
-      {
-        name: "Gingerbread",
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        points: [1, 2, 3, 4, 5],
-      },
-    ],
+    data: [],
   }),
   methods: {
     editItem(item) {
@@ -104,11 +53,10 @@ export default {
     },
   },
   async mounted() {
-    const response = await fetch(
-      "http://localhost:3000/api/test-point-collections"
-    );
+    const response = await fetch("http://localhost:3000/api/samples");
     const jsonData = await response.json();
     console.log(jsonData);
+    this.data = jsonData.data;
   },
 };
 </script>

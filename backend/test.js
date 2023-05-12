@@ -1,39 +1,39 @@
-const data = require('./demo.json')
+const data = require('./demo.json');
 
-var sqlite3 = require('sqlite3').verbose()
-
-const DBSOURCE = "db.sqlite"
+const db = new sqlite3.Database('database.db', (err) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log('Connected to the database.');
+});
 
 function extractSamplesFromJson() {
-    const samples = data.Project.Samples;
+    const samples = data.project.samples;
     return samples
 }
 
 function extractInputConditionsFromJson() {
-    const inputConditions = data.Project.InputConditions;
+    const inputConditions = data.project.inputConditions;
     return inputConditions
 }
 
 function extractTestPointCollectionsFromJson() {
-    const testPointCollections = data.TestPointCollections;
+    const testPointCollections = data.testPointCollections;
     testPointCollections.map((testPointCollection) => {
-        testPointCollection.SampleIds = JSON.stringify(testPointCollection.SampleIds)
-        const values = testPointCollection.TestPoints.map(testPoint => testPoint.Value);
-        testPointCollection.TestPoints = JSON.stringify(values);
-        //console.log(JSON.stringify(values))
+        testPointCollection.sampleIds = JSON.stringify(testPointCollection.sampleIds)
+        testPointCollection.TestPoints = JSON.stringify(testPointCollection.TestPoints)
     })
-
     return testPointCollections
 }
 
-function generateTables(db) {
+function generateTables() {
     const samples = extractSamplesFromJson()
     const inputConditions = extractInputConditionsFromJson()
     const testPointCollections = extractTestPointCollectionsFromJson()
 
     // Create the samples table
     db.run(`
-    CREATE TABLE samples (
+    CREATE TABLE IF NOT EXISTS samples (
         Id INTEGER PRIMARY KEY,
         FamilyName text,
         ProductName text,
@@ -42,8 +42,10 @@ function generateTables(db) {
   `, (err) => {
         if (err) {
             console.error(err.message);
+            res.status(500).send({ error: 'Failed to create the samples table.' });
             return;
         }
+
         samples.forEach((sample) => {
             db.run(`
         INSERT INTO samples (Id, FamilyName, ProductName, Name)
@@ -58,7 +60,7 @@ function generateTables(db) {
 
     // Create the inputConditions table
     db.run(`
-    CREATE TABLE inputConditions (
+    CREATE TABLE IF NOT EXISTS inputConditions (
         Id INTEGER PRIMARY KEY,
         Parameter text,
         Minimum real,
@@ -68,8 +70,10 @@ function generateTables(db) {
   `, (err) => {
         if (err) {
             console.error(err.message);
+            res.status(500).send({ error: 'Failed to create the inputConditions table.' });
             return;
         }
+
         inputConditions.forEach((inputCondition) => {
             db.run(`
         INSERT INTO inputConditions (Id, Parameter, Minimum, Maximum, TimeBetweenPoints)
@@ -84,7 +88,7 @@ function generateTables(db) {
 
     // Create the testPointsCollections table
     db.run(`
-    CREATE TABLE testPointsCollections (
+    CREATE TABLE IF NOT EXISTS testPointsCollections (
         Id INTEGER PRIMARY KEY,
         InputConditionId integer, 
         SampleIds text,
@@ -94,6 +98,7 @@ function generateTables(db) {
   `, (err) => {
         if (err) {
             console.error(err.message);
+            res.status(500).send({ error: 'Failed to create the testPointsCollections table.' });
             return;
         }
 
@@ -108,19 +113,6 @@ function generateTables(db) {
             });
         });
     });
+
+    res.send({ message: 'Tables generated successfully.' });
 };
-
-let db = new sqlite3.Database(DBSOURCE, (err) => {
-    if (err) {
-        // Cannot open database
-        console.error(err.message)
-        throw err
-    } else {
-        console.log('Connected to the SQLite database.')
-        // Create tables
-        generateTables(db)
-    }
-});
-
-
-module.exports = db

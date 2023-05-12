@@ -6,7 +6,7 @@ var db = require("./database.js");
 app.use(cors());
 
 app.get("/", (req, res) => {
-    var sql = "select * from user"
+    var sql = "select * from testPointsCollections"
     var params = []
     db.all(sql, params, (err, rows) => {
         if (err) {

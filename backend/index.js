@@ -36,7 +36,7 @@ app.get("/api/samples", (req, res) => {
 });
 
 app.get("/api/input-conditions", (req, res) => {
-    var sql = "select * from input_conditions";
+    var sql = "select * from inputConditions";
     var params = []
     db.all(sql, params, (err, rows) => {
         if (err) {
